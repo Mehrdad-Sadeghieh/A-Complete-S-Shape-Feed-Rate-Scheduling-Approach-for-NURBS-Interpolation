@@ -838,14 +838,7 @@ TTE=0:Ts:(size(VVelocity,2)-2)*Ts;
 TTEXYZ=TTE;
 save('TTEXYZ','TTEXYZ');
 
-[BP_value ,BP,length1,length2,Time1] = bitpatternXYZ (Ca(:,1),Ca(:,2),Ts);
 
-%% Saving Outputs
-
-save('length1','length1')
-save('length2','length2')
-save('BP_value' , 'BP_value')
-save('BP' , 'BP')
 save('Ca' , 'Ca')
 
 %% Figures
