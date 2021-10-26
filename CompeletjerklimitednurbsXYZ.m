@@ -7,8 +7,9 @@ format long
 
 %% Input variable
 tic
-load('try111111.txt');
-Input=try111111;
+load('ControlPoints.txt');
+% ControlPoints.txt consists of 3 columns (X Y Z Coordinates of Control Points) and P+1 Rows (Number of Control Points)
+Input=ControlPoints;
 
 An=10;          %% mm/s^2
 Jn=30;         %% mm/s^3
@@ -27,8 +28,6 @@ n=size(Input,1)-1;
 p=3;
 U=(0:1/(n-2):1);
 U=[0 0 0  U(1:size(U,2)-1) 1 1 1 1];
-% U=[0 0 0 1/4 1/4 2/4 2/4 3/4 3/4 1 1 1];  %%Circle
-% U=[0 0 0 1 1 1];  %%Line
 m=size(U,2)-1;
 n=n+1;
 m=m+1;
@@ -40,7 +39,6 @@ controlpoint(:,2)=controlpoint_c(:,2);
 controlpoint(:,3)=controlpoint_c(:,3);
 
 weight=zeros(1,n)+1;
-% weight=[1,sqrt(2)/2,1,sqrt(2)/2,1,sqrt(2)/2,1,sqrt(2)/2,1];  %%Cricle
 
 Ph=zeros(size(controlpoint,1),4);
 
@@ -194,7 +192,7 @@ for i=N:-1:1
         end
         ucritical=maxcurvature_u(i);
         CK= RatCurveDerivs(d,n,p,U,Pw2,ucritical,weight);
-        KCR=maxcurvature(i);%( norm( cross( CK(2,1:3),CK(3,1:3)))) / ( ( norm( CK(2,1:3)))^3);
+        KCR=maxcurvature(i);
         v1=Vback(i);
         v2=(2/Ts)*sqrt( (2*chorderror/KCR)-chorderror^2);
         v3=sqrt(An/KCR);
@@ -229,7 +227,7 @@ for i=1:N
         end
         Vforward(i+1)=(x);
         
-        if Vforward(i+1)>((At^2/Jt)+Vcr(i))%Vforward(i))
+        if Vforward(i+1)>((At^2/Jt)+Vcr(i))
             y1=Vcr(i+1)+TOL/5;
             g1=(Jt*(y1^2)+(At^2)*y1-Jt*(Vcr(i))^2+(At^2)*(Vcr(i))-2*At*Jt*Arclength(i));
             dg1=(2*Jt*y1+At^2);
@@ -317,8 +315,8 @@ for i=1:N
     
     if abs(Arclength(i)-sscri(i))<TOL      %% short block
         if Vcr(i)<Vcr(i+1) && (Vcr(i+1)-Vcr(i))<=((At^2)/Jt)
-            T1(i)=sqrt((Vcr(i+1)-Vcr(i))/Jt); %  At/Jt;
-            T3(i)=sqrt((Vcr(i+1)-Vcr(i))/Jt); %At/Jt;
+            T1(i)=sqrt((Vcr(i+1)-Vcr(i))/Jt); 
+            T3(i)=sqrt((Vcr(i+1)-Vcr(i))/Jt); 
             vmax(i)=Vcr(i+1);
         end
         if Vcr(i)<Vcr(i+1) && (Vcr(i+1)-Vcr(i))>((At^2)/Jt)
@@ -329,8 +327,8 @@ for i=1:N
         end
         if Vcr(i)>Vcr(i+1) && (Vcr(i)-Vcr(i+1))<=((At^2)/Jt)
             vmax(i)=Vcr(i);
-            T5(i)=sqrt((Vcr(i)-Vcr(i+1))/Jt);  %At/Jt;
-            T7(i)=sqrt((Vcr(i)-Vcr(i+1))/Jt);   %At/Jt;
+            T5(i)=sqrt((Vcr(i)-Vcr(i+1))/Jt); 
+            T7(i)=sqrt((Vcr(i)-Vcr(i+1))/Jt);   
         end
         if Vcr(i)>Vcr(i+1) && (Vcr(i)-Vcr(i+1))>((At^2)/Jt)
             vmax(i)=Vcr(i);
@@ -344,8 +342,8 @@ for i=1:N
         vmax(i)=Vmax;
         
         if  Vcr(i)<vmax(i) && (vmax(i)-Vcr(i))<=((At^2)/Jt)
-            T1(i)=sqrt((vmax(i)-Vcr(i))/Jt);  %At/Jt;
-            T3(i)=sqrt((vmax(i)-Vcr(i))/Jt);  %At/Jt;
+            T1(i)=sqrt((vmax(i)-Vcr(i))/Jt);  
+            T3(i)=sqrt((vmax(i)-Vcr(i))/Jt);  
         end
         if Vcr(i)<vmax(i) && (vmax(i)-Vcr(i))>((At^2)/Jt)
             T1(i)=At/Jt;
@@ -353,8 +351,8 @@ for i=1:N
             T3(i)=At/Jt;
         end
         if vmax(i)>Vcr(i+1) && (vmax(i)-Vcr(i+1))<=((At^2)/Jt)
-            T5(i)=sqrt((vmax(i)-Vcr(i+1))/Jt);   %At/Jt;
-            T7(i)=sqrt((vmax(i)-Vcr(i+1))/Jt);   %At/Jt;
+            T5(i)=sqrt((vmax(i)-Vcr(i+1))/Jt);  
+            T7(i)=sqrt((vmax(i)-Vcr(i+1))/Jt);  
         end
         if vmax(i)>Vcr(i+1) && (vmax(i)-Vcr(i+1))>((At^2)/Jt)
             T5(i)=At/Jt;
@@ -399,8 +397,8 @@ for i=1:N
         
         
         if Vcr(i)<vmax(i) && (vmax(i)-Vcr(i))<=((At^2)/Jt)
-            T1(i)=sqrt((vmax(i)-Vcr(i))/Jt);   %At/Jt;
-            T3(i)=sqrt((vmax(i)-Vcr(i))/Jt);   %At/Jt;
+            T1(i)=sqrt((vmax(i)-Vcr(i))/Jt);   
+            T3(i)=sqrt((vmax(i)-Vcr(i))/Jt);   
         end
         if Vcr(i)<vmax(i) && (vmax(i)-Vcr(i))>((At^2)/Jt)
             T1(i)=At/Jt;
@@ -408,8 +406,8 @@ for i=1:N
             T3(i)=At/Jt;
         end
         if vmax(i)>Vcr(i+1) && (vmax(i)-Vcr(i+1))<=((At^2)/Jt)
-            T5(i)=sqrt((vmax(i)-Vcr(i+1))/Jt);   %At/Jt;
-            T7(i)=sqrt((vmax(i)-Vcr(i+1))/Jt);    %At/Jt;
+            T5(i)=sqrt((vmax(i)-Vcr(i+1))/Jt);   
+            T7(i)=sqrt((vmax(i)-Vcr(i+1))/Jt);    
         end
         if vmax(i)>Vcr(i+1) && (vmax(i)-Vcr(i+1))>((At^2)/Jt)
             T5(i)=At/Jt;
@@ -432,19 +430,6 @@ Jta=zeros(1,N);
 Jtd=zeros(1,N);
 Atnew=zeros(1,N);
 Dtnew=zeros(1,N);
-
-% % for i=1:N
-% %     Tt(i)=T1(i)+T2(i)+T3(i)+T4(i)+T5(i)+T6(i)+T7(i);
-% %     Nt(i)=ceil(Tt(i)/Ts);
-% %     Ttptime(i)=Nt(i)*Ts;
-% %     T1(i)= (Ttptime(i)/ Tt(i))*T1(i);
-% %     T2(i)= (Ttptime(i)/ Tt(i))*T2(i);
-% %     T3(i)= (Ttptime(i)/ Tt(i))*T3(i);
-% %     T4(i)= (Ttptime(i)/ Tt(i))*T4(i);
-% %     T5(i)= (Ttptime(i)/ Tt(i))*T5(i);
-% %     T6(i)= (Ttptime(i)/ Tt(i))*T6(i);
-% %     T7(i)= (Ttptime(i)/ Tt(i))*T7(i);
-% % end
 
 
 for i=1:N
@@ -750,7 +735,6 @@ dS=zeros(1,counter5-2);
 
 for j=1:counter5-2
     dS(j)=PPosition(j+1)-PPosition(j);
-    %     dV(j)=VVelocity(j+1)-VVelocity(j);
 end
 
 counter6=1;
@@ -841,7 +825,6 @@ for j=1:counter6-1
     if  ua2>1
         ua2=1;
         h=h+1;
-        %         break
         
     end
     
@@ -859,11 +842,11 @@ save('TTEXYZ','TTEXYZ');
 
 %% Saving Outputs
 
-save('Ferdowsi','length1')
-save('Gear_length2','length2')
-save('Gear_BP_value' , 'BP_value')
-save('Gear_BP' , 'BP')
-save('Gear_Ca' , 'Ca')
+save('length1','length1')
+save('length2','length2')
+save('BP_value' , 'BP_value')
+save('BP' , 'BP')
+save('Ca' , 'Ca')
 
 %% Figures
 
