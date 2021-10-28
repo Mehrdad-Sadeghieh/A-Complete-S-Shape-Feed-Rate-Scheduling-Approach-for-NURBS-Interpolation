@@ -148,7 +148,6 @@ while true
     
 end
 
-% Arclength(counter4-1)=sqrt(400^2+200^2);
 save('ArclengthXYZ','Arclength');
 %%  Backward scanning
 
